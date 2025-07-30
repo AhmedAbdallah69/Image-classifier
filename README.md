@@ -1,167 +1,125 @@
+Image Classification of Natural Images using CNNs and Transfer Learning
+This project demonstrates a complete machine learning workflow for image classification. It uses the "natural_images" dataset, which contains 8 distinct categories. The project covers everything from data analysis and preprocessing to building, training, and evaluating multiple Convolutional Neural Network (CNN) models, including custom architectures and transfer learning models (VGG16, MobileNetV2). Finally, it establishes an inference pipeline to predict the class of a new image using the best-performing model.
 
+Model Comparison Plot
 
-```markdown
-# 🧠 Image Classification with CNNs & Transfer Learning
+Table of Contents
+Project Overview
+Features
+Dataset
+Usage
+Code Explanation
+1. Data Analysis
+2. Preprocessing
+3. Data Splitting and Augmentation
+4. Modeling
+5. Training
+6. Evaluation
+7. Inference Pipeline
+Results
+Project Overview
+The primary goal of this project is to classify images into one of eight categories. To achieve this, we explore and compare four different deep learning models:
 
-This project implements an end-to-end image classification pipeline using **custom CNNs** and **transfer learning models (VGG16, MobileNetV2)** on a dataset of 8 natural image categories.
+A simple, custom-built CNN.
+A deeper, more complex custom-built CNN.
+A transfer learning model using the VGG16 architecture.
+A transfer learning model using the MobileNetV2 architecture.
+The project evaluates these models based on their test accuracy and other metrics, selects the best one, and creates a ready-to-use function for making predictions on new images.
 
----
+Features
+End-to-End Workflow: From data loading to final prediction.
+Data Analysis: Comprehensive analysis of class distribution and image properties.
+Image Preprocessing: Resizing, normalization, and shuffling.
+Data Augmentation: Increases dataset diversity and reduces overfitting using ImageDataGenerator.
+Multiple Model Architectures: Compares custom CNNs with powerful pre-trained models.
+Transfer Learning: Leverages VGG16 and MobileNetV2 for robust feature extraction.
+Callbacks: Uses EarlyStopping to prevent overfitting and ModelCheckpoint to save the best model weights.
+Detailed Evaluation: Generates accuracy scores, classification reports, and confusion matrices.
+Visualizations: Plots training history, model comparisons, and prediction examples.
+Inference Pipeline: A simple function to classify a single image.
+Dataset
+The project uses the natural_images dataset, which must be structured with separate folders for each category.
 
-## 📂 Dataset
+Categories: airplane, car, cat, dog, flower, fruit, motorbike, person.
+Image Size: All images are resized to 150x150 pixels.
+Usage
+To run the project, execute the Python script from your terminal.
 
-The dataset is organized into 8 folders, one per category:
+Crucially, update the DATADIR variable in the script to point to the root directory of your "natural_images" dataset:
 
-```
+python
+DATADIR = r'C:/path/to/your/natural_images'
+Run the script:
 
-/airplane
-/car
-/cat
-/dog
-/flower
-/fruit
-/motorbike
-/person
+bash
+python your_script_name.py
+The script will then:
 
-```
+Analyze the dataset and show plots.
+Preprocess the data and save it to X.pickle and y.pickle.
+Visualize data augmentation examples.
+Build, train, and evaluate all four models.
+Save the trained model weights (.h5 files) and performance plots (.png files) in the project directory.
+Print a summary of the best-performing model.
+Demonstrate the inference pipeline on a sample image.
+Code Explanation
+1. Data Analysis
+The analyze_dataset() function performs an initial exploratory data analysis (EDA). It:
 
-Each folder contains image files. Images are resized to **150x150** during preprocessing.
+Counts the number of images in each category.
+Plots a bar chart of the class distribution.
+Displays one sample image from each category.
+Analyzes the dimensions of a sample of images.
+2. Preprocessing
+The create_training_data() function handles the data preparation. For each image, it:
 
----
+Reads the image file.
+Converts the color space from BGR (OpenCV's default) to RGB.
+Resizes the image to 150x150 pixels.
+Normalizes pixel values to the [0, 1] range by dividing by 255.0.
+Appends the processed image array and its corresponding integer label to a list.
+Finally, the entire dataset is shuffled to ensure randomness. The processed data (X) and labels (y) are saved using pickle for quick reloading in the future.
 
-## 🔍 Features
+3. Data Splitting and Augmentation
+Splitting: The data is split into training (70%), validation (15%), and test (15%) sets using sklearn.model_selection.train_test_split.
+Augmentation: keras.preprocessing.image.ImageDataGenerator is used to create augmented images for the training set on-the-fly. This helps the model generalize better by exposing it to a wider variety of image variations. The augmentations include:
+rotation_range=15
+width_shift_range=0.1
+height_shift_range=0.1
+shear_range=0.1
+zoom_range=0.1
+horizontal_flip=True
+4. Modeling
+Four different models are defined:
 
-- 📊 **Dataset analysis**
-- 🧼 **Image preprocessing & normalization**
-- 🔁 **Data augmentation**
-- 🧱 **Two custom CNN models**
-- 🤖 **Transfer learning: VGG16 & MobileNetV2**
-- 🧪 **Model evaluation & confusion matrices**
-- 🏆 **Model comparison & selection**
-- 🚀 **Inference pipeline for predictions**
+create_cnn_model1(): A simple CNN with three convolutional blocks, each containing Conv2D, BatchNormalization, MaxPooling2D, and Dropout.
+create_cnn_model2(): A deeper CNN with four convolutional blocks and more filters, designed to capture more complex features.
+create_vgg16_model(): A transfer learning model using the pre-trained VGG16 architecture. The convolutional base is frozen, and new, trainable fully-connected layers are added on top.
+create_mobilenet_model(): A lightweight transfer learning model using MobileNetV2. It uses GlobalAveragePooling2D which drastically reduces the number of parameters compared to Flatten.
+5. Training
+The train_and_plot_history() function orchestrates the training process for a given model.
 
----
+Callbacks:
+EarlyStopping: Monitors val_loss and stops training if it doesn't improve for 2 consecutive epochs (patience=2), restoring the best weights found.
+ModelCheckpoint: Saves the best version of the model (.h5 file) based on val_accuracy.
+Training: The model.fit() method is called using the data generator for the training data.
+Visualization: After training, it plots and saves the training & validation accuracy and loss curves.
+6. Evaluation
+The evaluate_model() function provides a comprehensive assessment of a trained model. It:
 
-## 🧪 Preprocessing
+Calculates the final test accuracy and loss.
+Generates a classification report with precision, recall, and F1-score for each class.
+Creates and displays a confusion matrix to visualize class-wise performance.
+Visualizes 15 sample predictions from the test set, coloring the titles green for correct predictions and red for incorrect ones.
+7. Inference Pipeline
+Best Model Selection: The script identifies the best model by comparing the test accuracies of all four models.
+Inference Function: The create_inference_pipeline() function creates and returns a simple prediction function, predict_image(image_path). This function can take the path to any image, preprocess it correctly, and return the predicted class and confidence score.
+Results
+After running the script, the following artifacts will be generated:
 
-```python
-# Image preprocessing:
-- Resize to 150x150
-- Normalize to [0, 1]
-- Save features/labels using pickle
-````
-
-Split into:
-
-* **Train**: 70%
-* **Validation**: 15%
-* **Test**: 15%
-
-Data augmentation includes rotation, shift, shear, zoom, and flips.
-
----
-
-## 🧠 Models
-
-### ✅ CNN Model 1
-
-* 3 convolutional blocks
-* Dropout & BatchNormalization
-
-### ✅ CNN Model 2
-
-* Deeper CNN with 4 blocks
-* More filters and dense layers
-
-### 🤖 VGG16
-
-* Transfer learning with frozen convolutional layers
-* Custom classification head
-
-### 🤖 MobileNetV2
-
-* Lightweight transfer model with GAP layer
-
----
-
-## 🏋️ Training
-
-Uses:
-
-* `EarlyStopping` to prevent overfitting
-* `ModelCheckpoint` to save best weights
-
-Visualized with:
-
-* Accuracy / loss curves
-* Saved to `*.png` files
-
----
-
-## 📈 Evaluation
-
-Each model is evaluated using:
-
-* ✅ Test accuracy
-* 📄 Classification report
-* 🧩 Confusion matrix (plotted)
-* 🖼️ Sample predictions (with color-coded labels)
-
-Best model is selected based on test accuracy.
-
----
-
-## 🚀 Inference Pipeline
-
-A reusable function:
-
-```python
-def predict_image(image_path):
-    ...
-```
-
-* Takes a new image
-* Preprocesses and predicts
-* Displays prediction with confidence
-
----
-
-## 🧰 Setup
-
-Install dependencies:
-
-```bash
-pip install numpy opencv-python matplotlib seaborn tqdm tensorflow keras scikit-learn
-```
-
----
-
-## 📊 Example Outputs
-
-| Model       | Accuracy |
-| ----------- | -------- |
-| CNN Model 1 | 33.53%   |
-| CNN Model 2 | 31.30%   |
-| VGG16       | 97.39%   |
-| MobileNetV2 | 99.32% ✅ |
-
-*(Numbers are just placeholders — update based on your results)*
-
----
-
-## ✅ Conclusion
-
-The project demonstrates:
-
-* The effectiveness of transfer learning
-* Importance of preprocessing and data augmentation
-* End-to-end model building, training, and deployment
-
-Use `inference_pipeline` to deploy your best model and start classifying images in real-world scenarios.
-
----
-
-## 📌 License
-
-This project is open for educational use and experimentation. Attribution appreciated if reused!
-
-```
+Pickle Files: X.pickle, y.pickle containing the preprocessed dataset.
+Model Files: CNN_Model1.h5, CNN_Model2.h5, VGG16_Model.h5, MobileNet_Model.h5.
+Training Plots: CNN_Model1_history.png, etc., for each model.
+Evaluation Plots: CNN_Model1_confusion_matrix.png, CNN_Model1_sample_predictions.png, etc.
+Comparison Plot: model_comparison.png showing a bar chart of the final test accuracies.
+The console output will announce the best-performing model based on test accuracy. The inference pipeline will then be set up using this model, ready for new predictions.
