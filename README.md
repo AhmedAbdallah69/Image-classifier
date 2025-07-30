@@ -1,5 +1,3 @@
-Here's a **GitHub-ready `README.md`-style documentation** for your project, written in Markdown with clean formatting, code blocks, and emojis for clarity:
-
 ---
 
 ```markdown
@@ -27,25 +25,6 @@ The dataset is organized into 8 folders, one per category:
 ```
 
 Each folder contains image files. Images are resized to **150x150** during preprocessing.
-
----
-
-## 🗺️ Project Structure
-
-```
-
-.
-├── data/                        # Dataset directory
-├── model\_checkpoints/          # Saved model weights
-├── X.pickle / y.pickle         # Preprocessed data
-├── \*.h5                        # Saved trained models
-├── \*\_history.png               # Accuracy/Loss curves
-├── \*\_confusion\_matrix.png      # Confusion matrices
-├── \*\_sample\_predictions.png    # Visualized predictions
-├── model\_comparison.png        # Accuracy comparison chart
-└── script.py                   # Main script
-
-````
 
 ---
 
@@ -160,10 +139,10 @@ pip install numpy opencv-python matplotlib seaborn tqdm tensorflow keras scikit-
 
 | Model       | Accuracy |
 | ----------- | -------- |
-| CNN Model 1 | 82.45%   |
-| CNN Model 2 | 84.97%   |
-| VGG16       | 87.10%   |
-| MobileNetV2 | 89.32% ✅ |
+| CNN Model 1 | 33.53%   |
+| CNN Model 2 | 31.30%   |
+| VGG16       | 97.39%   |
+| MobileNetV2 | 99.32% ✅ |
 
 *(Numbers are just placeholders — update based on your results)*
 
