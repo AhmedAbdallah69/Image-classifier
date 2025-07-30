@@ -1,4 +1,4 @@
----
+
 
 ```markdown
 # 🧠 Image Classification with CNNs & Transfer Learning
@@ -164,9 +164,4 @@ Use `inference_pipeline` to deploy your best model and start classifying images 
 
 This project is open for educational use and experimentation. Attribution appreciated if reused!
 
-```
-
----
-
-Let me know if you'd like this saved to a file like `README.md` or tailored for Jupyter Notebook use too.
 ```
