@@ -54,6 +54,8 @@ The project uses the **natural_images** dataset, which must be structured with s
 - **Categories:** `airplane`, `car`, `cat`, `dog`, `flower`, `fruit`, `motorbike`, `person`.
 - **Image Size:** All images are resized to `150x150` pixels.
 
+Which can be obtained from here : https://www.kaggle.com/datasets/prasunroy/natural-images 
+
 ## Usage
 
 The project is divided into two main parts: training the models and running the GUI.
